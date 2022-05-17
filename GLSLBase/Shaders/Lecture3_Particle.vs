@@ -10,7 +10,8 @@ in float a_Period;
 uniform float u_Time;
 uniform vec3 u_Accel;
 
-float g_PI = 3.14;
+const float g_PI = 3.14;
+const mat3 g_RotMat = mat3(0, -1, 0, 1, 0, 0, 0, 0, 0);
 
 void main()
 {
@@ -25,10 +26,12 @@ void main()
 		t = fractional * a_LifeTime;
 		tt = t * t;
 
-		float amp = a_Amp; // ÁÖ±â
-		float period = a_Period; // ÁøÆø
-		newPos.x = a_Position.x + a_Velocity.x * t + 0.5 * u_Accel.x * tt;
-		newPos.y = a_Position.y + amp * sin(period * t * 2.0 * g_PI);
+		float amp = a_Amp;
+		float period = a_Period;
+		newPos = a_Position + a_Velocity * t + 0.5 * u_Accel * tt;
+
+		vec3 rotVec = normalize(a_Velocity * g_RotMat);
+		newPos = newPos + amp * rotVec * sin(period * t * 2.0 * g_PI);
 		newPos.z = 0;
 	}
 
