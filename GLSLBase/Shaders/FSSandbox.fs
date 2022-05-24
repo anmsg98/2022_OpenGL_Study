@@ -6,5 +6,17 @@ in vec4 v_Color;
 
 void main()
 {
-	FragColor = v_Color;
+	float dis = distance(v_Color.xy, vec2(0.5, 0.5));
+	vec4 newColor = vec4(0, 0, 0, 0);
+
+	if(dis < 0.5)
+	{
+		newColor = vec4(1, 1, 1, 1);
+	}
+	else
+	{
+		newColor = vec4(0, 0, 0, 0);
+	}
+	FragColor = newColor;
+	//FragColor = vec4(dis);
 }
