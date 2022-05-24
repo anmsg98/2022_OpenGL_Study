@@ -7,6 +7,9 @@ in float a_LifeTime;
 in float a_Amp;
 in float a_Period;
 in float a_RandomValue;
+in vec4 a_Color;
+
+out vec4 v_Color;
 
 uniform float u_Time;
 uniform vec3 u_Accel;
@@ -40,12 +43,14 @@ void main()
 
 		vec3 rotVec = normalize(newAccel * g_RotMat);
 		newPos = newPos + 0.1 * amp * rotVec * sin(period * t * 2.0 * g_PI);
-		newPos.z = 0;
+		newPos.z = 0;		
+		v_Color = a_Color * (1.0 - fractional);
 	}
 
 	else
 	{
 		newPos = vec3(-100000 ,-100000, -100000);
+		v_Color = vec4(0, 0, 0, 0);
 	}
 
 	
