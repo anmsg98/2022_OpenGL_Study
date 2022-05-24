@@ -26,7 +26,7 @@ vec4 DrawMultipleCircles()
 	return vec4(temp);
 }
 
-vec4 DrawCircles() // 서서히 사라지게 하는 기능 이나 시간이 갈수록 좁혀지는 기능 시험에 나옴
+vec4 DrawCircles() // 서서히 사라지게 하는 기능이나 시간이 갈수록 좁혀지는 기능 시험에 나옴
 {
 	vec4 returnColor = vec4(0);
 	float Limit = 0.5;
@@ -61,7 +61,26 @@ vec4 DrawCircle()
 	return FragColor;
 }
 
+vec4 RadarCircle()
+{
+	float dis = distance(vec2(0.5, 0), v_Color.xy);
+	float sinValue = sin(dis * 2 * PI - u_Time * 100);
+	sinValue = pow(sinValue, 16);
+	vec4 returnColor = vec4(sinValue);
+
+	for (int i = 0; i < 10; i++)
+	{
+		float dTemp = distance(u_Points[i].xy, v_Color.xy);
+		float temp = sin(dTemp * 4 * PI);
+		temp = clamp(temp, 0, 1);
+		if (dTemp < 0.2)
+			returnColor += 0.2 * vec4(temp); 
+	}
+
+	return returnColor;
+}
+
 void main()
 {
-	FragColor = DrawCircles();
+	FragColor = RadarCircle();
 }
