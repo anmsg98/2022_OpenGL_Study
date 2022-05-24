@@ -125,7 +125,6 @@ void Renderer::CreateVertexBufferObjects()
 		-rectSize, -rectSize, 0.0, 1, 1, 1, 1,
 		 rectSize, -rectSize, 0.0, 1, 1, 1, 1,
 		 rectSize,  rectSize, 0.0, 1, 1, 1, 1, // triangle 2
-
 	};
 
 	glGenBuffers(1, &m_VBOSandbox);
@@ -618,7 +617,7 @@ void Renderer::Lecture2()
 	glDisableVertexAttribArray(attribPosition);
 }
 
-float gTime = 1.0f;
+float gTime = 0.0f;
 void Renderer::Lecture3()
 {
 	GLuint shader = m_Lecture3Shader;
@@ -715,6 +714,40 @@ void Renderer::Lecture4_FSSandbox()
 	glEnableVertexAttribArray(attribPosition);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOSandbox); //x, y, z, r, g, b, a --> stride 7
 	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, 0);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glDisableVertexAttribArray(attribPosition);
+}
+
+float g_points[] = {
+	(float)((float)rand() / (float)RAND_MAX), (float)((float)rand() / (float)RAND_MAX), 0.01,
+	(float)((float)rand() / (float)RAND_MAX), (float)((float)rand() / (float)RAND_MAX), 0.01,
+	(float)((float)rand() / (float)RAND_MAX), (float)((float)rand() / (float)RAND_MAX), 0.01,
+	(float)((float)rand() / (float)RAND_MAX), (float)((float)rand() / (float)RAND_MAX), 0.01,
+	(float)((float)rand() / (float)RAND_MAX), (float)((float)rand() / (float)RAND_MAX), 0.01,
+	(float)((float)rand() / (float)RAND_MAX), (float)((float)rand() / (float)RAND_MAX), 0.01,
+	(float)((float)rand() / (float)RAND_MAX), (float)((float)rand() / (float)RAND_MAX), 0.01,
+	(float)((float)rand() / (float)RAND_MAX), (float)((float)rand() / (float)RAND_MAX), 0.01,
+	(float)((float)rand() / (float)RAND_MAX), (float)((float)rand() / (float)RAND_MAX), 0.01,
+	(float)((float)rand() / (float)RAND_MAX), (float)((float)rand() / (float)RAND_MAX), 0.01,
+};
+
+void Renderer::Lecture4_Raindrop()
+{
+	GLuint shader = m_FSSandboxShader;
+	glUseProgram(shader);
+
+	int attribPosition = glGetAttribLocation(shader, "a_Position");
+	glEnableVertexAttribArray(attribPosition);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOSandbox); //x, y, z, r, g, b, a --> stride 7
+	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, 0);
+
+	int uniformPoints = glGetUniformLocation(shader, "u_Points");
+	glUniform3fv(uniformPoints, 10, g_points);
+	int uniformTime = glGetUniformLocation(shader, "u_Time");
+	glUniform1f(uniformTime, gTime);
+	gTime += 0.0001;
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 

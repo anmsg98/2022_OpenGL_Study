@@ -6,6 +6,9 @@ in vec4 v_Color;
 
 const float PI = 3.141592;
 
+uniform vec3 u_Points[10];
+uniform float u_Time;
+
 vec4 CrossPattern()
 {
 	vec4 returnValue = vec4(1);
@@ -15,12 +18,30 @@ vec4 CrossPattern()
 	returnValue = vec4(resultColor);
 	return returnValue;
 }
+
 vec4 DrawMultipleCircles()
 {
 	float dis = distance(v_Color.xy, vec2(0.5, 0.5));  // 0~0.5
 	float temp = sin(10 * dis * 4 * PI);
 	return vec4(temp);
 }
+
+vec4 DrawCircles() // 서서히 사라지게 하는 기능 이나 시간이 갈수록 좁혀지는 기능 시험에 나옴
+{
+	vec4 returnColor = vec4(0);
+	float Limit = 0.5;
+	for (int i = 0; i < 10; i++)
+	{
+		float dis = distance(u_Points[i].xy, v_Color.xy);
+		float temp = sin(10 * dis * 4 * PI - u_Time * 100);
+		if (dis < u_Time)
+		{
+			returnColor += vec4(temp); 
+		}
+	}
+	return returnColor;
+}
+
 vec4 DrawCircle()
 {
 	float dis = distance(v_Color.xy, vec2(0.5, 0.5));
@@ -32,7 +53,7 @@ vec4 DrawCircle()
 		FragColor = vec4(0);*/
 
 	// 내부가 빈 원
-	if (dis > 0.48 && dis < 0.5)
+	if (dis > 0.49 && dis < 0.5)
 		FragColor = vec4(1);
 	else
 		FragColor = vec4(0);
@@ -42,5 +63,5 @@ vec4 DrawCircle()
 
 void main()
 {
-	FragColor = DrawMultipleCircles();
+	FragColor = DrawCircles();
 }
