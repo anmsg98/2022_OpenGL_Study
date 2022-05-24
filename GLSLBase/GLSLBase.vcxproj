@@ -175,6 +175,8 @@
   <ItemGroup>
     <None Include="Shaders\FSSandbox.fs" />
     <None Include="Shaders\FSSandbox.vs" />
+    <None Include="Shaders\FullRect.fs" />
+    <None Include="Shaders\FullRect.vs" />
     <None Include="Shaders\Lecture3.fs" />
     <None Include="Shaders\Lecture3.vs" />
     <None Include="Shaders\Lecture3_Particle.fs" />

@@ -28,6 +28,7 @@ public:
 	void Lecture4_Raindrop();
 	void Lecture4_RadarCircle();
 	void Lecture5_LineSegment();
+	void Lecture5_FullRect();
 
 private:
 	void Initialize(int windowSizeX, int windowSizeY);
@@ -79,7 +80,10 @@ private:
 
 	GLuint m_VBOLineSegment = 0;
 	GLuint m_VBOLineSegmentCount = 0;
-
 	GLuint m_LineSegmentShader = 0;
+
+	GLuint m_VBOFullRect = 0;
+	GLuint m_LineFullRectShader = 0;
+
 };
 
