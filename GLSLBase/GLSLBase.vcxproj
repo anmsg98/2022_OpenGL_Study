@@ -179,6 +179,8 @@
     <None Include="Shaders\Lecture3.vs" />
     <None Include="Shaders\Lecture3_Particle.fs" />
     <None Include="Shaders\Lecture3_Particle.vs" />
+    <None Include="Shaders\LineSegment.fs" />
+    <None Include="Shaders\LineSegment.vs" />
     <None Include="Shaders\SolidRect.fs" />
     <None Include="Shaders\SolidRect.vs" />
   </ItemGroup>
