@@ -130,6 +130,57 @@ void Renderer::CreateVertexBufferObjects()
 	glGenBuffers(1, &m_VBOSandbox);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOSandbox);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(lecture4_rect), lecture4_rect, GL_STATIC_DRAW);
+
+	float lecture4Pac0_Pos[]
+		=
+	{
+		-rectSize, -rectSize, 0.0,
+		 rectSize,  rectSize, 0.0,
+		-rectSize,  rectSize, 0.0,
+		-rectSize, -rectSize, 0.0,
+		 rectSize, -rectSize, 0.0,
+		 rectSize,  rectSize, 0.0,
+	};
+
+	float lecture4Pac0_Color[]
+		=
+	{
+		1, 1, 1, 1, // r, g, b, a -->AttribPointer
+		1, 1, 1, 1,
+		1, 1, 1, 1, // triangle 1
+		1, 1, 1, 1,
+		1, 1, 1, 1,
+		1, 1, 1, 1, // triangle 2
+	};
+
+	glGenBuffers(1, &m_VBOPack0_Pos);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOPack0_Pos);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(lecture4Pac0_Pos), lecture4Pac0_Pos, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &m_VBOPack0_Color);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOPack0_Color);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(lecture4Pac0_Color), lecture4Pac0_Color, GL_STATIC_DRAW);
+
+	float lecture4Pac1[]
+		=
+	{
+		-rectSize, -rectSize, 0.0,
+		 rectSize,  rectSize, 0.0,
+		-rectSize,  rectSize, 0.0,
+		-rectSize, -rectSize, 0.0,
+		 rectSize, -rectSize, 0.0,
+		 rectSize,  rectSize, 0.0,
+		 1, 1, 1, 1,
+		 1, 1, 1, 1,
+		 1, 1, 1, 1,
+		 1, 1, 1, 1,
+		 1, 1, 1, 1,
+		 1, 1, 1, 1,
+	};
+
+	glGenBuffers(1, &m_VBOPack1);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOPack1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(lecture4Pac1), lecture4Pac1, GL_STATIC_DRAW);
 }
 
 void Renderer::CreateParticle(int count)
@@ -758,12 +809,36 @@ void Renderer::Lecture4_RadarCircle()
 {
 	GLuint shader = m_FSSandboxShader;
 	glUseProgram(shader);
-
+	
+	/* 1번 데이터 패킹 방법 (포지션, 컬러 따로)
 	int attribPosition = glGetAttribLocation(shader, "a_Position");
 	glEnableVertexAttribArray(attribPosition);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOPack0_Pos); //x, y, z
+	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	// Color
+	int attribColor= glGetAttribLocation(shader, "a_Color");
+	glEnableVertexAttribArray(attribColor);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOPack0_Color); //x, y, z
+	glVertexAttribPointer(attribColor, 4, GL_FLOAT, GL_FALSE, 0, 0);*/
+
+	//2번 데이터 패킹 방법 (하나의 배열에 모두저장 (포지션+컬러, 포지션+컬러 .....)
+	int attribPosition = glGetAttribLocation(shader, "a_Position");
+	glEnableVertexAttribArray(attribPosition);
+	int attribColor = glGetAttribLocation(shader, "a_Color");
+	glEnableVertexAttribArray(attribColor);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOSandbox); //x, y, z, r, g, b, a --> stride 7
 	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, 0);
+	glVertexAttribPointer(attribColor, 4, GL_FLOAT, GL_FALSE, sizeof(float)*7, (GLvoid*)(sizeof(float)*3));
 
+	/* 3번 데이터 패킹 방법 (2번과 동일하지만 포지션 + 포지션..... 컬러 + 컬러)
+	int attribPosition = glGetAttribLocation(shader, "a_Position");
+	glEnableVertexAttribArray(attribPosition);
+	int attribColor = glGetAttribLocation(shader, "a_Color");
+	glEnableVertexAttribArray(attribColor);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOPack1); //x, y, z, r, g, b, a --> stride 7
+	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+	glVertexAttribPointer(attribColor, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (GLvoid*)(sizeof(float) * 18));*/
+	
 	int uniformPoints = glGetUniformLocation(shader, "u_Points");
 	glUniform3fv(uniformPoints, 10, g_points);
 	int uniformTime = glGetUniformLocation(shader, "u_Time");

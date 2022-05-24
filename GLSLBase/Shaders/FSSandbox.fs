@@ -3,6 +3,7 @@
 layout(location=0) out vec4 FragColor;
 
 in vec4 v_Color;
+in vec4 v_ColorOverride;
 
 const float PI = 3.141592;
 
@@ -65,16 +66,14 @@ vec4 RadarCircle()
 {
 	float dis = distance(vec2(0.5, 0), v_Color.xy);
 	float sinValue = sin(dis * 2 * PI - u_Time * 100);
-	sinValue = pow(sinValue, 16);
+	sinValue = clamp(pow(sinValue, 4), 0 , 1);
 	vec4 returnColor = vec4(sinValue);
 
 	for (int i = 0; i < 10; i++)
 	{
 		float dTemp = distance(u_Points[i].xy, v_Color.xy);
-		float temp = sin(dTemp * 4 * PI);
-		temp = clamp(temp, 0, 1);
-		if (dTemp < 0.2)
-			returnColor += 0.2 * vec4(temp); 
+		if (dTemp < 0.1)
+			returnColor += vec4(0, 20 * sinValue * (0.1 - dTemp), 0, 0); 
 	}
 
 	return returnColor;
@@ -82,5 +81,5 @@ vec4 RadarCircle()
 
 void main()
 {
-	FragColor = RadarCircle();
+	FragColor = RadarCircle() * v_ColorOverride;
 }
