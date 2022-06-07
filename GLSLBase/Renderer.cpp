@@ -45,6 +45,9 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	//Create Textures
 	CreateTextures();
 	
+	//Load Textures
+	m_TexRGB = CreatePngTexture("rgb.png");
+
 	//Initialize camera settings
 	m_v3Camera_Position = glm::vec3(0.f, 0.f, 1000.f);
 	m_v3Camera_Lookat = glm::vec3(0.f, 0.f, 0.f);
@@ -472,8 +475,8 @@ void Renderer::CreateTextures()
 	glGenTextures(1, &m_TexChecker);
 	glBindTexture(GL_TEXTURE_2D, m_TexChecker);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerboard);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
@@ -990,7 +993,7 @@ void Renderer::Lecture6_TexSandbox()
 	int uniformTex = glGetUniformLocation(shader, "u_TexSampler");
 	glUniform1i(uniformTex, 0);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_TexChecker);
+	glBindTexture(GL_TEXTURE_2D, m_TexRGB);
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
