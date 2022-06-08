@@ -994,6 +994,13 @@ void Renderer::Lecture6_TexSandbox()
 	glUniform1i(uniformTex, 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_TexRGB);
+	int uniformTex1 = glGetUniformLocation(shader, "u_TexSampler1");
+	glUniform1i(uniformTex1, 1);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_TexChecker);
+	int uniformTime = glGetUniformLocation(shader, "u_Time");
+	glUniform1f(uniformTime, gTime);
+	gTime += 0.005f;
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
