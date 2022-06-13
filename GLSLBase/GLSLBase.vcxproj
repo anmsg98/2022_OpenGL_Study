@@ -173,6 +173,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\DummyMesh.fs" />
+    <None Include="Shaders\DummyMesh.vs" />
     <None Include="Shaders\FSSandbox.fs" />
     <None Include="Shaders\FSSandbox.vs" />
     <None Include="Shaders\FullRect.fs" />
