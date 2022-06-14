@@ -31,6 +31,7 @@ public:
 	void Lecture5_FullRect();
 	void Lecture6_TexSandbox();
 	void Lecture9_DummyMesh();
+	void FBORender();
 
 private:
 	void Initialize(int windowSizeX, int windowSizeY);
@@ -44,6 +45,7 @@ private:
 	void CreateDummyMesh();
 	void CreateLine(int SegCount);
 	void CreateFBOs();
+	void DrawFullScreenTexture(GLuint texID);
 	bool m_Initialized = false;
 	
 	unsigned int m_WindowSizeX = 0;
@@ -124,5 +126,7 @@ private:
 	GLuint m_FBOTexture7 = 0;
 	GLuint m_RBDepth7 = 0;
 	GLuint m_FBO7= 0;
+
+	GLuint m_FullRectTexShader = 0;
 };
 
