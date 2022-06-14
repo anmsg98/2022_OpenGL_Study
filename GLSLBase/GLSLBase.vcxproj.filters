@@ -77,6 +77,12 @@
     <None Include="Shaders\DummyMesh.vs">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shaders\FullRectTexture.fs">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\FullRectTexture.vs">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

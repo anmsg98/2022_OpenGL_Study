@@ -46,6 +46,9 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	//Create Textures
 	CreateTextures();
 	
+	//Gen FBO
+	CreateFBOs();
+	
 	//Load Textures
 	m_TexRGB = CreatePngTexture("rgb.png");
 
@@ -588,6 +591,36 @@ void Renderer::CreateLine(int SegCount)
 	delete[]lineVertices;
 }
 
+void Renderer::CreateFBOs()
+{
+	glGenTextures(1, &m_FBOTexture0);
+	glBindTexture(GL_TEXTURE_2D, m_FBOTexture0); 
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 512, 512, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	
+	glGenRenderbuffers(1, &m_RBDepth0);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_RBDepth0);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 512, 512);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	glGenFramebuffers(1, &m_FBO0);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_FBOTexture0, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RBDepth0);
+
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		std::cout << "something goes wrong while gen FBO" << std::endl;
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void Renderer::AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType)
 {
 	//쉐이더 오브젝트 생성
@@ -1095,6 +1128,7 @@ void Renderer::Lecture6_TexSandbox()
 
 void Renderer::Lecture9_DummyMesh()
 {
+	glViewport(0, 0, 250, 250);
 	GLuint shader = m_DummyMeshShader;
 	glUseProgram(shader);
 
